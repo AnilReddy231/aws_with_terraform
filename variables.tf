@@ -7,3 +7,4 @@ variable "tags" {
     MonitorType = "New Relic"
     }
 }
+

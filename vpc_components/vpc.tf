@@ -11,3 +11,5 @@ resource "aws_vpc" "vpc" {
     map("Name", "${var.env_name}-vpc")
     )}"
 }
+
+
