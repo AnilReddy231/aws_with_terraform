@@ -29,3 +29,15 @@ output "accepter_route_tables" {
 output "requester_route_tables" {
   value = "${module.vpc_resources.requester_route_tables}"
 }
+
+output "dj_root_pass" {
+  value = "${module.dj_instance.rootUserPassword}"
+}
+
+output "dj_monitor_pass" {
+    value = "${module.dj_instance.monitorUserPassword}"
+}
+
+output "dj_private_key" {
+	value = "${module.dj_instance.generated_key}"
+}

@@ -3,7 +3,7 @@ output "vpc_flowlog" {
 }
 
 output "peering_id" {
-  value = "${aws_vpc_peering_connection.peering.id}"
+  value = "${aws_vpc_peering_connection.intra_peering.id}"
 }
 
 output "accepter_route_tables" {

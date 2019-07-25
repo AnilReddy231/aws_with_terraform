@@ -1,3 +1,6 @@
+variable "env_name" {
+}
+
 variable "tags" {
   type = "map"
   default = {
@@ -7,22 +10,6 @@ variable "tags" {
     MonitorType = "New Relic"
     }
 }
-
-variable "region" {
-  
-}
-
-variable "dj_instance_size" {
-
-}
-
-variable "dj_dns" {
-
-}
-variable "env_name" {
-
-}
-
-variable "iam_role"{
+variable "vpc_id" {
   
 }

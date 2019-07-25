@@ -57,3 +57,22 @@ module "vpc_resources" {
   requester_vpc_id  = "${module.vpc.vpc_id}"
   accepter_vpc_id   = "${module.vpc_qa.vpc_id}"
 }
+
+module "dj_firewall" {
+  source   = "./firewall"
+  env_name = "${var.env_name}"
+  tags     = "${var.tags}"
+  vpc_id   = "${module.vpc.vpc_id}"
+}
+
+module "dj_instance" {
+  source           = "./instance"
+  region           = "${var.region}"
+  dj_instance_size = "${var.dj_instance_size}"
+  sg_id            = "${module.dj_firewall.dj_security_group}"
+  subnet_id        = "${module.vpc.public_subnet[0]}"
+  dj_dns           = "${var.dj_dns}"
+  env_name		     = "${var.env_name}"
+  tags             = "${var.tags}"
+}
+
