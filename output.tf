@@ -30,14 +30,14 @@ output "requester_route_tables" {
   value = "${module.vpc_resources.requester_route_tables}"
 }
 
-output "dj_root_pass" {
-  value = "${module.dj_instance.rootUserPassword}"
+output "root_pass" {
+  value = "${module.instance.rootUserPassword}"
 }
 
-output "dj_monitor_pass" {
-    value = "${module.dj_instance.monitorUserPassword}"
+output "monitor_pass" {
+    value = "${module.instance.monitorUserPassword}"
 }
 
-output "dj_private_key" {
-	value = "${module.dj_instance.generated_key}"
+output "private_key" {
+	value = "${module.instance.generated_key}"
 }

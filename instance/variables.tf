@@ -8,7 +8,7 @@ variable "tags" {
   description = "Key/value tags to assign to all AWS resources"
 }
 
-variable "dj_instance_size" {}
+variable "ansible_instance_size" {}
 
 variable "sg_id" {}
 
@@ -20,7 +20,13 @@ variable "instance_ami_map" {
   }
 }
 
-variable dj_dns {}
+variable "controller_dns" {}
+
+variable "ansible_dns" {
+}
 
 variable "subnet_id" {}
 
+variable "slave_count" {
+  default = 1
+}

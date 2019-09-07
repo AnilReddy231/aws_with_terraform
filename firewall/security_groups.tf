@@ -1,26 +1,35 @@
-resource "aws_security_group" "private_dj" {
-  name        = "private_dj_security_group"
-  description = "Private DJ Security Group"
+resource "aws_security_group" "public_sg" {
+  name        = "public_security_group"
+  description = "Public Security Group"
   vpc_id      = "${var.vpc_id}"
   tags = "${merge(var.tags,
-    map("Name", "${var.env_name}-private_dj")
+    map("Name", "${var.env_name}-public")
   )}"
 }
 
-resource "aws_security_group_rule" "dj_1389" {
+resource "aws_security_group_rule" "port_22" {
   type              = "ingress"
-  from_port         = 1389
-  to_port           = 1389
+  from_port         = 22
+  to_port           = 22
   protocol          = "tcp"
-  security_group_id = "${aws_security_group.private_dj.id}"
+  security_group_id = "${aws_security_group.public_sg.id}"
   cidr_blocks       = ["173.95.51.163/32"]
 }
 
-resource "aws_security_group_rule" "dj_outbound" {
+resource "aws_security_group_rule" "allow_all" {
+  type              = "ingress"
+  from_port       = 0
+  to_port         = 65535
+  protocol        = "tcp"
+  security_group_id = "${aws_security_group.public_sg.id}"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "all_outbound" {
   type              = "egress"
   from_port         = 0
   to_port           = 0
   protocol          = "-1"
-  security_group_id = "${aws_security_group.private_dj.id}"
+  security_group_id = "${aws_security_group.public_sg.id}"
   cidr_blocks       = ["0.0.0.0/0"]
 }

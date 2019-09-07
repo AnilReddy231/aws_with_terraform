@@ -1,10 +1,10 @@
 data "template_file" "file_import" {
-  template = "${file("${path.module}/opendj.tpl")}"
+  template = "${file("${path.module}/default.tpl")}"
 
   vars = {
     rootUserPassword     = "${random_string.rootUserPassword.result}"
     monitorUserPassword  = "${random_string.monitorUserPassword.result}"
-    tag_name             = "${var.dj_dns}"
+    tag_name             = "${var.controller_dns}"
   }
 }
 
@@ -19,9 +19,9 @@ data "template_cloudinit_config" "render_parts" {
   }
 }
 
-resource "aws_instance" "dj" {
+resource "aws_instance" "ansible_controller" {
   ami                    = "${lookup(var.instance_ami_map, var.region)}"
-  instance_type          = "${var.dj_instance_size}"
+  instance_type          = "${var.ansible_instance_size}"
   vpc_security_group_ids = ["${var.sg_id}"]
   source_dest_check      = false
   subnet_id              = "${var.subnet_id}"
@@ -34,6 +34,6 @@ resource "aws_instance" "dj" {
   }
 
   tags = "${merge(var.tags,
-    map("Name", "${var.dj_dns}")
+    map("Name", "${var.controller_dns}")
   )}"
 }

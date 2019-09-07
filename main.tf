@@ -58,20 +58,22 @@ module "vpc_resources" {
   accepter_vpc_id   = "${module.vpc_qa.vpc_id}"
 }
 
-module "dj_firewall" {
+module "firewall" {
   source   = "./firewall"
   env_name = "${var.env_name}"
   tags     = "${var.tags}"
   vpc_id   = "${module.vpc.vpc_id}"
 }
 
-module "dj_instance" {
+module "instance" {
   source           = "./instance"
+  slave_count           = "${var.slave_count}"
   region           = "${var.region}"
-  dj_instance_size = "${var.dj_instance_size}"
-  sg_id            = "${module.dj_firewall.dj_security_group}"
+  ansible_instance_size = "${var.ansible_instance_size}"
+  sg_id            = "${module.firewall.security_group}"
   subnet_id        = "${module.vpc.public_subnet[0]}"
-  dj_dns           = "${var.dj_dns}"
+  controller_dns   = "${var.controller_dns}"
+  ansible_dns      = "${var.ansible_dns}"
   env_name		     = "${var.env_name}"
   tags             = "${var.tags}"
 }
