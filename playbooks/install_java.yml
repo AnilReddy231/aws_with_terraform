@@ -1,0 +1,14 @@
+---
+- name: Install Java version 8
+  hosts: java
+  become: true
+
+  tasks:  
+  - name: Ensure Java is installed.
+    package:
+      name: "{{ packages }}"
+    vars:
+      packages:
+        - java-1.8.0-openjdk
+      state: latest
+    when: ansible_distribution == 'Amazon'

@@ -1,5 +1,9 @@
 variable "env_name" {}
 
+variable "ansible_user" {
+  default = "ec2-user"
+}
+
 variable "region" {}
 
 variable "tags" {

@@ -1,14 +1,16 @@
 resource "aws_route_table" "public" {
   vpc_id = "${data.aws_vpc.current.id}"
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = "${aws_internet_gateway.ig.id}"
-  }
-
   tags = "${merge(var.tags,
     map("Name", "${var.env_name}-public")
   )}"
+}
+
+resource "aws_route" "igw" {
+  route_table_id            = "${aws_route_table.public.id}"
+  destination_cidr_block    = "0.0.0.0/0"
+  gateway_id                = "${aws_internet_gateway.ig.id}"
+  depends_on                = [aws_route_table.public]
 }
 
 resource "aws_route_table_association" "public" {
