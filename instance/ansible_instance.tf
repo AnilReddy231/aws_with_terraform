@@ -66,7 +66,7 @@ resource "null_resource" "python3" {
     }
 
   provisioner "remote-exec" {
-    inline = ["ls -ltr", "sudo yum install python36 python36-devel python36-libs python36-tools -y"]
+    inline = ["sudo yum install python36 python36-devel python36-libs python36-tools -y"]
   }
 }
 
@@ -79,7 +79,7 @@ resource "null_resource" "install_java" {
         echo "${aws_instance.ansible[count.index].public_ip} ansible_user=${var.ansible_user} ansible_ssh_private_key_file=${pathexpand(local.ssh_key_file)}" | tee -a java.ini;
         export ANSIBLE_HOST_KEY_CHECKING=False;
         export ANSIBLE_LOG_PATH=ansible_java.log;
-        ansible-playbook -u ${var.ansible_user} --private-key ${pathexpand(local.ssh_key_file)} -i java.ini playbooks/install_java.yml;
+        ansible-playbook -u ${var.ansible_user} --private-key ${pathexpand(local.ssh_key_file)} -i java.ini ansible/playbooks/install_java.yml;
         sleep 30;
       EOT
     }
@@ -94,7 +94,7 @@ resource "null_resource" "install_jenkins_ci" {
         echo "${aws_instance.ansible[0].public_ip} ansible_user=${var.ansible_user} ansible_ssh_private_key_file=${pathexpand(local.ssh_key_file)}" | tee -a jenkins.ini;
         export ANSIBLE_HOST_KEY_CHECKING=False;
         export ANSIBLE_LOG_PATH=ansible_jenkins.log;
-        ansible-playbook -u ${var.ansible_user} --private-key ${pathexpand(local.ssh_key_file)} -i jenkins.ini playbooks/install_jenkins.yml;
+        ansible-playbook -u ${var.ansible_user} --private-key ${pathexpand(local.ssh_key_file)} -i jenkins.ini ansible/playbooks/install_jenkins.yml;
         sleep 30;
       EOT
     }
@@ -109,7 +109,7 @@ resource "null_resource" "install_gitlab_ce" {
         echo "${aws_instance.ansible[1].public_ip} ansible_user=${var.ansible_user} ansible_ssh_private_key_file=${pathexpand(local.ssh_key_file)}" | tee -a gitlab.ini;
         export ANSIBLE_HOST_KEY_CHECKING=False;
         export ANSIBLE_LOG_PATH=ansible_gitlab.log;
-        ansible-playbook -u ${var.ansible_user} --private-key ${pathexpand(local.ssh_key_file)} -i gitlab.ini playbooks/install_gitlab.yml;
+        ansible-playbook -u ${var.ansible_user} --private-key ${pathexpand(local.ssh_key_file)} -i gitlab.ini ansible/playbooks/install_gitlab.yml;
         sleep 30;
       EOT
     }

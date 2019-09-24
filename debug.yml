@@ -1,0 +1,8 @@
+---
+  - name: Debugging
+    hosts: tag_Type_Ansible
+    become: true
+
+    tasks:
+    - debug: 
+        msg: "Hello"

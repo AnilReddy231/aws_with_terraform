@@ -1,0 +1,6 @@
+---
+ - hosts: tag_Type_Ansible
+   become: true
+   gather_facts: yes
+   roles:
+    - apache2
