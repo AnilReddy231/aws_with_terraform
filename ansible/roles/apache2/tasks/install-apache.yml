@@ -1,0 +1,6 @@
+---
+  - name: Installing Apache packages
+    package:
+      name: "{{ apache_packages }}"
+      state: "{{ apache_packages_state }}"
+      enablerepo: "{{ apache_enablerepo }}"

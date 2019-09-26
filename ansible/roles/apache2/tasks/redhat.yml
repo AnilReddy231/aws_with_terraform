@@ -1,0 +1,21 @@
+---
+  - name: Generate Self-Signed OpenSSL certificate 
+    openssl_certificate:
+      provider: selfsigned
+      path: /etc/ssl/crt/selfsigned.crt
+      privatekey_path: /etc/ssl/private/webserver.pem
+      csr_path: /etc/ssl/csr/webserver.csr
+    
+  - name: Including OS Specific Variables
+    include_vars: redhat.yml
+
+  - name: Define Apache Packages
+    set_fact:
+      apache_packages: "{{ __apache_packages | list }}"
+    when: apache_packages is not defined
+
+  - name: Installing Apache
+    include_tasks: install-apache.yml 
+
+  - name: Configuring Apache
+    include_tasks: configure-apache.yml
