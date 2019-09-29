@@ -1,0 +1,41 @@
+---
+  - name: Cert Folder
+    file:
+      path: /etc/ssl/crt
+      state: directory
+      owner: root
+      group: root
+      mode: '0755'
+
+  - name: Generate Self-Signed OpenSSL certificate
+    command: openssl req -x509 -nodes -days 365 -newkey rsa:2048 -subj "/C=US/ST=NC/L=Charlotte/O=Dis/CN=www.webserver231.com" -keyout /etc/ssl/crt/webserver.pem -out /etc/ssl/crt/webserver.crt
+    register: cert_check
+    changed_when: cert_check.rc != 0
+    failed_when: cert_check.stdout_lines|length > 0
+    
+  - name: Including OS Specific Variables
+    include_vars: redhat_vars.yml
+
+  - name: Define Apache Packages
+    set_fact:
+      apache_packages: "{{ __apache_packages | list }}"
+    when: apache_packages is not defined
+
+  - name: Installing Apache
+    include_tasks: install-apache.yml 
+
+  - name: Configuring Apache
+    include_tasks: configure-apache.yml
+  
+  - name: Ensure Apache has selected state and enabled on boot.
+    service:
+      name: "{{ apache_service }}"
+      state: "{{ apache_state }}"
+  
+  - name: Testing static website
+    package:
+      name: wget
+      state: latest
+    notify:
+      - test website
+      - display test results

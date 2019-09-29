@@ -3,8 +3,8 @@
     lineinfile:
       backup: yes
       path: "{{ apache_server_root }}/conf/{{ apache_daemon }}.conf"
-      regex: "{{ items.regexp }}"
-      line: "{{ items.line }}"
+      regex: "{{ item.regexp }}"
+      line: "{{ item.line }}"
       state: present
     with_items: "{{ apache_ports_configuration_items }}"
     notify: restart apache
@@ -12,12 +12,15 @@
   - name: Check Certificates existance
     stat:
       path: "{{ item.certificate_file }}"
-      register: apache_ssl_certificates
     with_items: "{{ apache_vhosts_ssl }}"
-  
-  - debug:
-      msg: "{{ apache_ssl_certificates.stat }}"
-  
+    register: apache_ssl_certificates
+    
+  - name: Fail if return code is not 0
+    fail:
+      msg: "{{ item.stat.path }} doesn't exists"
+    when: not item.stat.exists
+    with_items: "{{ apache_ssl_certificates.results }}"
+
   - name: add apache vhosts configuration
     template:
       src: "{{ apache_vhosts_template }}"

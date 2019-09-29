@@ -30,7 +30,7 @@
    - servername: "www.webserver231.com"
      documentroot: "/var/www/html"
      certificate_file: "/etc/ssl/crt/webserver.crt"
-     certificate_key_file: "/etc/ssl/private/webserver.pem"
+     certificate_key_file: "/etc/ssl/crt/webserver.pem"
 
   apache_ignore_missing_ssl_certificate: true
 
