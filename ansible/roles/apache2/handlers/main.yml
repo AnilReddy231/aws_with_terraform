@@ -3,9 +3,13 @@
     service:
       name: "{{ apache_service }}"
       state: "{{ apache_restart_state }}"
-  - name: test website
-    shell: /usr/bin/wget http://localhost
-    register: site_results
+  # - name: test website
+  #   shell: /usr/bin/wget http://localhost
+  #   register: site_results
   
-  - name: display test results
-    debug: var=site_results
+  # - name: display test results
+  #   debug: var=site_results
+  - name: test website
+    uri:
+      url: http://{{ ansible_default_ipv4.address }}
+      status_code: 200

@@ -21,6 +21,10 @@
     when: not item.stat.exists
     with_items: "{{ apache_ssl_certificates.results }}"
 
+  - debug:
+      var: item.stat.path
+    with_items: "{{ apache_ssl_certificates.results }}"
+
   - name: add apache vhosts configuration
     template:
       src: "{{ apache_vhosts_template }}"

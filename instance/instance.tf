@@ -34,6 +34,7 @@ resource "aws_instance" "ansible_controller" {
   }
 
   tags = "${merge(var.tags,
-    map("Name", "${var.controller_dns}")
+    map("Name", "${var.controller_dns}"),
+    map("Type", "Controller")
   )}"
 }

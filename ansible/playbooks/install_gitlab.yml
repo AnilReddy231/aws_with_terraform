@@ -1,6 +1,6 @@
 ---
 - name: Install Gitlab
-  hosts: gitlab
+  hosts: tag_Type_Controller
   become: true
 
   tasks:

@@ -18,17 +18,6 @@ module "vpc_qa" {
   azs = ["us-east-1d"]
 }
 
-/*
-module "vpc" {
-  source = "./vpc_components"
-  env_name = "dev"
-  vpc_cidr = "192.168.0.0/24"
-  nof_public_subnets = "1"
-  nof_private_subnets = "1"
-  tags = "${var.tags}"
-  azs = ["us-east-1a"]
-}
-*/
 
 module "s3"{
   source = "./s3_resources"
@@ -67,7 +56,7 @@ module "firewall" {
 
 module "instance" {
   source           = "./instance"
-  slave_count           = "${var.slave_count}"
+  slave_count      = "${var.slave_count}"
   region           = "${var.region}"
   ansible_instance_size = "${var.ansible_instance_size}"
   sg_id            = "${module.firewall.security_group}"

@@ -1,0 +1,21 @@
+---
+  - name: Ansible with Jinja2
+    hosts: localhost
+    tasks:
+      - name: If Statement
+        debug:
+          msg: >
+                --== Ansible with Jinja2 Templating ==--
+                {# if the Ansible Host name is #}
+                {% set pumba = 'gundu' %}
+                {% if ansible_distribution == "MacOSX" %}
+                  Running on {{ ansible_hostname }}, Variable set {{ pumba }}
+                {% endif %}
+      - name: For loop
+        debug:
+          msg: >
+                {# Looping through IPv4 #}
+                {{ ansible_default_ipv4 | to_nice_json(indent=2) }}
+                {% for key,value in ansible_default_ipv4.items() %}
+                    entry {{ loop.index }} Value of {{ key }} is {{ value }}
+                {% endfor %}
