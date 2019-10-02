@@ -7,17 +7,17 @@
     - name: Install Dependencies
       package:
         name: "{{ item }}"
-      with_items: [ postfix, mailutils, ca-certificates, curl, openssh-server]
+      with_items: [ postfix, ca-certificates, curl, openssh-server, git, openssl]
       when: ansible_distribution == 'Amazon'
     
     - name: Install Gitlab Repository
       get_url:
-        url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh
-        dest: /tmp/script.deb.sh
+        url: https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh
+        dest: /tmp/gitlab_install_repository.sh
         mode: 0777
     
     - name: Run Gitlab Repository Script
-      shell: /tmp/script.deb.sh
+      shell: /tmp/gitlab_install_repository.sh
 
     - name: Install GitLab CE
       package:
@@ -26,15 +26,6 @@
         state: latest
         update_cache: yes
     
-    - name: Run ufw allow http script
-      command: ufw allow http
-
-    - name: Run ufw allow https script 
-      command: ufw allow https
-
-    - name: Run ufw allow OpenSSH script 
-      command: ufw allow OpenSSH
-      
     - name: Restart with reconfigure
       command: gitlab-ctl reconfigure
 
