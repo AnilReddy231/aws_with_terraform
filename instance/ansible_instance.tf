@@ -47,7 +47,8 @@ resource "aws_instance" "ansible" {
 
     tags = "${merge(var.tags,
         map("Name", "${var.ansible_dns}${count.index}"),
-        map("Type","Ansible")
+        map("Type","Ansible"),
+        map("AppServer","Tomcat")
     )}"
 }
 

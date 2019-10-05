@@ -1,0 +1,6 @@
+---
+ - hosts: tag_AppServer_Tomcat
+   become: true
+   gather_facts: false
+   roles:
+    - tomcat9

@@ -1,0 +1,58 @@
+---
+  - name: Install JDK 11
+    package:
+      name: openjdk-11-jdk
+      state: present
+  
+  - name: create tomcat user
+    user:
+      name: tomcat
+      group: tomcat
+      home: /user/share/tomcat
+      createhome: no
+  
+  - name: add tomcat group
+    group:
+      name: tomcat
+  
+  - name: create tomcat9 directory
+    file:
+      path: /opt/tomcat9
+      state: directory
+      owner: tomcat
+      group: tomcat
+      recurse: yes
+      mode: 0755
+
+  - name: download and unarchive
+    unarchive: 
+      src: http://www-us.apache.org/dist/tomcat/tomcat-9/v9.0.26/bin/apache-tomcat-9.0.26.tar.gz
+      dest: /opt/tomcat9
+      owner: tomcat
+      group: tomcat
+      remote_src: yes
+      extra_opts: [--strip-components=1]
+    register: install_tomcat
+    retries: 3
+    until: install_tomcat is succeeded
+
+  - name: configure tomcat instance
+    template:
+      src: server.xml.j2
+      dest: /opt/tomcat9/conf/server.xml
+    notify: 
+      - restart tomcat instance
+  
+  - name: Copy tomcat.service
+    copy:
+      src: files/tomcat.service
+      dest: /etc/systemd/system/
+      mode: 0755
+    notify:
+      - enable tomcat service
+  
+  
+  - name: Ensure tomcat has selected state and enabled on boot.
+    service:
+      name: tomcat
+      state: started
