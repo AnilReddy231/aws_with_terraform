@@ -74,6 +74,18 @@ pipeline {
          always{
              echo "I AM ALWAYS first"
          }
+         success {
+          echo "The pipeline ${currentBuild.fullDisplayName} completed successfully."
+         }
+         aborted {
+            echo "Build had been Aborted"
+        }
+         failure {
+          echo "Failed Pipeline: ${currentBuild.fullDisplayName} Something is wrong with ${env.BUILD_URL}"
+         }
+         unstable {
+          echo 'Build is Unstable'
+         }
     }
 }
 
