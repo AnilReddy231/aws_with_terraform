@@ -89,7 +89,7 @@ pipeline {
     }
 }
 
-def notifyBuild(string buildStatus = 'STARTED'){
+def notifyBuild(String buildStatus = 'STARTED'){
     buildStatus = buildStatus ?: 'SUCCESS'
     echo "Started: Name: ${env.JOB_NAME}"
 }
