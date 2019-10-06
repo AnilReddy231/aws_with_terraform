@@ -69,11 +69,6 @@ pipeline {
                 echo "Deploying to PROD"
             }
         }
-        stage("Deploy"){
-            steps{
-
-            }
-        }
     }
     post{
         /*
