@@ -1,6 +1,17 @@
 ---
   - name: Ansible with Jinja2
     hosts: localhost
+    environment:
+      SOME: value
+    vars:
+      users:
+        alice:
+          name: Alice Appleworth
+          telephone: 123-456-7890
+        bob:
+          name: Bob Bananarama
+          telephone: 987-654-3210
+
     tasks:
       - name: If Statement
         debug:
@@ -19,3 +30,10 @@
                 {% for key,value in ansible_default_ipv4.items() %}
                     entry {{ loop.index }} Value of {{ key }} is {{ value }}
                 {% endfor %}
+      - name: Print phone records
+        debug:
+          msg: "User {{ item.key }} is {{ item.value.name }} ({{ item.value.telephone }})"
+        with_dict: "{{ users }}"
+
+      - debug: "{{ hostvars }}"
+      - debug: "{{ lookup('env','HOME') }}"
