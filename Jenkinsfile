@@ -10,7 +10,6 @@ pipeline {
             // Only keep the 3 most recent builds
             logRotator(numToKeepStr: '3')
         )
-        skipDefaultCheckout()
         timestamps()
         retry(3)
         timeout time:10, unit: 'MINUTES'
@@ -28,12 +27,6 @@ pipeline {
                 echo "Specifier :: ${params.PACIFIC}"
             }
             
-        }
-        stage("Checkout"){
-            steps{
-                echo "Checkout Repo"
-                git url: "${GIT_URL}"
-            }
         }
         stage("Analysis"){
             parallel {
