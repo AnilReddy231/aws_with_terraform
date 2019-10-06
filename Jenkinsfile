@@ -5,6 +5,9 @@ pipeline {
     environment {
         PROJECT_NAME = "AWS With Terraform"
     }
+    triggers {
+    issueCommentTrigger('.*')
+    }
     options {
         buildDiscarder(
             // Only keep the 3 most recent builds
@@ -72,7 +75,7 @@ pipeline {
          * 3. aborted, success, unstable or failure - depending on status
          */
          always{
-             echo "I AM ALWAYS first"
+             echo 'One way or another, Pipeline had finished executing'
          }
          success {
           echo "The pipeline ${currentBuild.fullDisplayName} completed successfully."
