@@ -2,8 +2,13 @@
 
 pipeline {
     agent any
+    // executes on an executor with the label 'some-label' or 'docker'
+    // label "some-label || docker"
     environment {
         PROJECT_NAME = "AWS With Terraform"
+        BUILD_NUM_ENV = currentBuild.getNumber()
+        // this assumes that "cred1" has been created on Jenkins Credentials
+        USER1 = credentials("cred1")
     }
     triggers {
     issueCommentTrigger('.*')
@@ -16,6 +21,12 @@ pipeline {
         timestamps()
         retry(3)
         timeout time:10, unit: 'MINUTES'
+        disableConcurrentBuilds()
+    }
+    // use the 'tools' section to use specific tool versions already defined in Jenkins config 
+    tools {
+        maven "apache-maven-3.1.0"
+        jdk "default"
     }
     parameters {
         string(name: "PACIFIC", description: "Sample Variable", defaultValue: "ATLANTIC")
@@ -25,13 +36,20 @@ pipeline {
     stages {
         stage("Initialize") {
             steps {
-                notifyBuild('STARTED')
-                echo "${BUILD_NUMBER} - ${env.BUILD_ID} on ${env.JENKINS_URL}"
-                echo "Specifier :: ${params.PACIFIC}"
+                // Script blocks can run any Groovy script or
+                script {
+                    notifyBuild('STARTED')
+                    echo "${BUILD_NUMBER} - ${env.BUILD_ID} on ${env.JENKINS_URL}"
+                    echo "Specifier :: ${params.PACIFIC}"
+                }
             }
             
         }
         stage("Analysis"){
+            environment {
+            // BAR will only be available in this stage
+                BAR = "STAGE"
+            }
             parallel {
                 stage('Sonatype'){
                     steps {
@@ -54,15 +72,41 @@ pipeline {
             steps{
                 echo "Deploying to QA"
             }
+            // variable assignment (other than environment variables) can only be done in a script block
+            // complex global variables (with properties or methods) can only be run in a script block
+            // env variables can also be set within a script block
+            script{
+                String res = env.MAKE_RESULT
+                if (res != null) {
+                    echo "Setting build result ${res}"
+                    currentBuild.result = res
+                } else {
+                    echo "All is well"
+                }
+            }
         }
         stage("Deploy - PROD"){
-            when{
-                expression{
-                    params.DEPLOY_PROD == true
-                }
+            when {
+                // skip this stage unless on Master branch
+                branch "master"
             }
             steps{
                 echo "Deploying to PROD"
+            }
+        }
+        stage("Recursive"){
+            when {
+                expression{
+                    currentBuild.getNumber() % 2 == 1  
+                }
+            }
+            steps{
+                // create a directory called "tmp" and cd into that directory
+                dir("tmp") {
+                build job: currentBuild.getProjectName(), parameters: [
+                booleanParam(name:"DEPLOY_QA", value: true)
+                ]
+                }
             }
         }
     }
@@ -76,7 +120,11 @@ pipeline {
          */
          always{
              echo 'One way or another, Pipeline had finished executing'
+             archive "target/**/*"
          }
+         changed {
+            echo "CHANGED from last run"
+        }
          success {
           echo "The pipeline ${currentBuild.fullDisplayName} completed successfully."
          }
