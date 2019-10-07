@@ -94,21 +94,21 @@ pipeline {
                 echo "Deploying to PROD"
             }
         }
-        stage("Recursive"){
-            when {
-                expression{
-                    currentBuild.getNumber() % 2 == 1  
-                }
-            }
-            steps{
-                // create a directory called "tmp" and cd into that directory
-                dir("tmp") {
-                build job: currentBuild.getProjectName(), parameters: [
-                booleanParam(name:"DEPLOY_QA", value: true)
-                ]
-                }
-            }
-        }
+        // stage("Recursive"){
+        //     when {
+        //         expression{
+        //             currentBuild.getNumber() % 2 == 1  
+        //         }
+        //     }
+        //     steps{
+        //         // create a directory called "tmp" and cd into that directory
+        //         dir("tmp") {
+        //         build job: currentBuild.getProjectName(), parameters: [
+        //         booleanParam(name:"DEPLOY_QA", value: true)
+        //         ]
+        //         }
+        //     }
+        // }
     }
     post{
         /*
