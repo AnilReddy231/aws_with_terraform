@@ -24,10 +24,10 @@ pipeline {
         disableConcurrentBuilds()
     }
     // use the 'tools' section to use specific tool versions already defined in Jenkins config 
-    tools {
-        maven "apache-maven-3.1.0"
-        jdk "default"
-    }
+    // tools {
+    //     maven "apache-maven-3.1.0"
+    //     jdk "default"
+    // }
     parameters {
         string(name: "PACIFIC", description: "Sample Variable", defaultValue: "ATLANTIC")
         booleanParam(name:"DEPLOY_QA", description: "Deploy to QA Environment", defaultValue: true)
@@ -71,7 +71,6 @@ pipeline {
             }
             steps{
                 echo "Deploying to QA"
-            }
             // variable assignment (other than environment variables) can only be done in a script block
             // complex global variables (with properties or methods) can only be run in a script block
             // env variables can also be set within a script block
@@ -82,6 +81,7 @@ pipeline {
                     currentBuild.result = res
                 } else {
                     echo "All is well"
+                    }
                 }
             }
         }
