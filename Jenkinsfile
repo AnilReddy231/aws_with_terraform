@@ -8,7 +8,7 @@ pipeline {
         PROJECT_NAME = "AWS With Terraform"
         BUILD_NUM_ENV = currentBuild.getNumber()
         // this assumes that "cred1" has been created on Jenkins Credentials
-        USER1 = credentials("Jenkins")
+        //USER1 = credentials("Jenkins")
     }
     triggers {
     issueCommentTrigger('.*')
@@ -120,7 +120,7 @@ pipeline {
          */
          always{
              echo 'One way or another, Pipeline had finished executing'
-             archive "target/**/*"
+             //archive "target/**/*"
          }
          changed {
             echo "CHANGED from last run"
