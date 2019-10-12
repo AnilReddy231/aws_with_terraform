@@ -13,7 +13,7 @@ resource "aws_security_group_rule" "port_22" {
   to_port           = 22
   protocol          = "tcp"
   security_group_id = "${aws_security_group.public_sg.id}"
-  cidr_blocks       = ["173.95.51.164/32"]
+  cidr_blocks       = ["173.95.51.163/32"]
 }
 
 # resource "aws_security_group_rule" "default_22" {
@@ -44,3 +44,25 @@ resource "aws_security_group_rule" "all_outbound" {
   security_group_id = "${aws_security_group.public_sg.id}"
   cidr_blocks       = ["0.0.0.0/0"]
 }
+resource "aws_security_group" "k8s_api_http" {
+  count         = "${var.env_name == "kube" ? 1 : 0}"
+  name          = "k8s_api_http"
+  vpc_id        = "${var.vpc_id}"
+  tags          = "${merge(var.tags,
+                  map("Name", "${var.env_name}-k8s")
+                  )}"
+  ingress {
+    from_port   = 80
+    protocol    = "tcp"
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    protocol    = "tcp"
+    to_port     = 443
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+

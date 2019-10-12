@@ -21,3 +21,15 @@ variable "azs" {
 variable "vpc_id" {
     default = ""
 }
+
+variable "private_subnet_tags" {
+  default = ""
+}
+
+variable "public_subnet_tags" {
+  default = ""
+}
+
+variable "enable_nat_gateway" {
+  default = false
+}

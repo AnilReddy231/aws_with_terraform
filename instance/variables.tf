@@ -26,11 +26,11 @@ variable "instance_ami_map" {
 
 variable "controller_dns" {}
 
-variable "ansible_dns" {
-}
-
 variable "subnet_id" {}
 
 variable "slave_count" {
   default = 1
+}
+variable "ansible_dns" {
+  
 }

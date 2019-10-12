@@ -26,7 +26,7 @@ resource "local_file" "ssh_key_private" {
   filename           = "${local.ssh_key_file}"
 
   provisioner "local-exec" {
-    command = "chmod 600 ${file(local.ssh_key_file)}"
+    command = "chmod 600 ${local.ssh_key_file}"
   }
 }
 

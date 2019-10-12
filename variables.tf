@@ -19,6 +19,7 @@ variable "controller_dns" {
 }
 
 variable "ansible_dns" {
+  default = ""
 }
 
 variable "env_name" {
