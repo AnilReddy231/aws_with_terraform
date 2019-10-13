@@ -6,7 +6,7 @@ spec:
   api:
     loadBalancer:
       additionalSecurityGroups:
-      - '[sg-0d3f24ed32e91d61a]'
+      - sg-0d3f24ed32e91d61a
       type: Public
   authorization:
     rbac: {}
@@ -53,17 +53,17 @@ spec:
     name: utility-eu-west-2c
     type: Utility
     zone: eu-west-2c
-  - egress: eu-west-2a
+  - egress: nat-06aede38da55d1151
     id: subnet-0c0e17dee217f4fcf
     name: eu-west-2a
     type: Private
     zone: eu-west-2a
-  - egress: eu-west-2b
+  - egress: nat-06aede38da55d1151
     id: subnet-0b8b5d079a04d3b3e
     name: eu-west-2b
     type: Private
     zone: eu-west-2b
-  - egress: eu-west-2c
+  - egress: nat-06aede38da55d1151
     id: subnet-0b72d912113d6808e
     name: eu-west-2c
     type: Private

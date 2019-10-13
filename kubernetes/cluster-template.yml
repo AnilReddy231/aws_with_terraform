@@ -6,7 +6,7 @@ spec:
   api:
     loadBalancer:
       type: Public
-      additionalSecurityGroups: ["{{.k8s_api_http.value}}"]
+      additionalSecurityGroups: {{.k8s_api_http.value}}
   authorization:
     rbac: {}
   channel: stable
@@ -50,7 +50,7 @@ spec:
     name: {{index $.avlb_zones.value $i}}
     type: Private
     zone: {{index $.avlb_zones.value $i}}
-    egress: {{index $.avlb_zones.value $i}}
+    egress: {{index $.nat_gateway_ids.value 0}}
   {{end}}
   topology:
     dns:

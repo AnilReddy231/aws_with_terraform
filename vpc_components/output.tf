@@ -14,6 +14,6 @@ output "region" {
   value = "${data.aws_region.current.name}"
 }
 
-# output "nat_gw_id" {
-#   value = "${aws_vpc.vpc.}"
-# }
+output "nat_gw_ids" {
+  value = "${aws_nat_gateway.ngw.*.id}"
+}

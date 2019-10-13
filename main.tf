@@ -25,27 +25,27 @@ module "vpc_qa" {
   azs = ["us-east-1d"]
 }
 
-module "vpc_kube" {
-  source = "./vpc_components"
-  providers = {
-    aws = aws.west
-  }
-  env_name = "${local.kops_env_name}"
-  vpc_cidr = "${local.kube_cidr}"
-  nof_public_subnets = "3"
-  nof_private_subnets = "3"
-  tags = "${merge(var.tags,
-  map("kubernetes.io/cluster/${local.kubernetes_cluster_name}","shared"),
-  map("environment","kops"))}"
-  private_subnet_tags = {
-    "kubernetes.io/role/internal-alb" = true
-  }
-  public_subnet_tags = {
-    "kubernetes.io/role/external-alb" = true
-  }
-  azs = "${local.azs}"
-  enable_nat_gateway = true
-}
+# module "vpc_kube" {
+#   source = "./vpc_components"
+#   providers = {
+#     aws = aws.west
+#   }
+#   env_name = "${local.kops_env_name}"
+#   vpc_cidr = "${local.kube_cidr}"
+#   nof_public_subnets = "3"
+#   nof_private_subnets = "3"
+#   tags = "${merge(var.tags,
+#   map("kubernetes.io/cluster/${local.kubernetes_cluster_name}","shared"),
+#   map("environment","kops"))}"
+#   private_subnet_tags = {
+#     "kubernetes.io/role/internal-alb" = true
+#   }
+#   public_subnet_tags = {
+#     "kubernetes.io/role/external-alb" = true
+#   }
+#   azs = "${local.azs}"
+#   enable_nat_gateway = true
+# }
 
 module "s3"{
   source = "./s3_resources"
@@ -82,15 +82,15 @@ module "firewall" {
   vpc_id   = "${module.vpc.vpc_id}"
 }
 
-module "kube_firewall" {
-  source   = "./firewall"
-  providers = {
-    aws = aws.west
-  }
-  env_name = "${local.kops_env_name}"
-  tags     = "${var.tags}"
-  vpc_id   = "${module.vpc_kube.vpc_id}"
-}
+# module "kube_firewall" {
+#   source   = "./firewall"
+#   providers = {
+#     aws = aws.west
+#   }
+#   env_name = "${local.kops_env_name}"
+#   tags     = "${var.tags}"
+#   vpc_id   = "${module.vpc_kube.vpc_id}"
+# }
 
 module "instance" {
   source           = "./instance"
